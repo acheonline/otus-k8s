@@ -1,0 +1,11 @@
+server.port: ${SERVER_PORT}
+spring:
+  application:
+    name: ${APPLICATION_NAME}
+
+management:
+  endpoint:
+    health:
+      probes.enabled: true
+      livenessState.enabled: true
+      readinessState.enabled: true

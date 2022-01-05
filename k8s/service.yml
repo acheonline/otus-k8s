@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: otus-service
+  namespace: otus-ns
+spec:
+  ports:
+  - port: 8000
+    targetPort: 80
+  selector:
+    app: otus
