@@ -1,5 +1,7 @@
 Kubernetes/Docker/SpringBoot infrastructure solution
 
+This example shows how works spring boot application wihin main infrastructure architecture patterns - scalability service deployment platform pattern, service-discovery pattern, liveness/readiness probe pattern, api gateway pattern
+
 Required: k8s/minikube, docker
 
 1) For local execution
