@@ -23,7 +23,7 @@ spec:
           readinessProbe:
             periodSeconds: 1
             httpGet:
-              path: /health/liveness
+              path: /health/readiness
               port: 8000
             initialDelaySeconds: 1
             timeoutSeconds: 2
