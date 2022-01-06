@@ -17,18 +17,24 @@ spec:
       containers:
         - image: achernyavskiy0n/otus-k8s
           name: otus
+          ports:
+            - name: web-port
+              containerPort: 8000
           readinessProbe:
             periodSeconds: 1
             httpGet:
-              path: /actuator/health/liveness
+              path: /health/liveness
               port: 8000
+            initialDelaySeconds: 1
+            timeoutSeconds: 2
           livenessProbe:
             httpGet:
-              path: /actuator/health/liveness
+              path: /health/liveness
               port: 8000
             initialDelaySeconds: 50
             periodSeconds: 5
             failureThreshold: 100
+            timeoutSeconds: 2
           envFrom:
             - configMapRef:
                 name: otus-config

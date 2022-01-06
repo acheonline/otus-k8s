@@ -4,8 +4,10 @@ metadata:
   name: otus-service
   namespace: otus-ns
 spec:
+  type: NodePort
   ports:
-  - port: 8000
-    targetPort: 80
+    - protocol: TCP
+      port: 9000
+      targetPort: 8000
   selector:
     app: otus

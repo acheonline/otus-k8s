@@ -9,3 +9,7 @@ management:
       probes.enabled: true
       livenessState.enabled: true
       readinessState.enabled: true
+  endpoints:
+    web:
+      base-path: /
+      path-mapping.health: health

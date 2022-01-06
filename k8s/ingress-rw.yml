@@ -1,23 +1,16 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: otus-ingress-rewrite
+  name: otus-ingress-rewrite-redirect
   namespace: otus-ns
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/rewrite-target: http://arch.homework/otusapp/achernyavskiy/$1$2 #https://habr.com/ru/post/584958/
 spec:
   rules:
     - host: arch.homework
       http:
         paths:
-          - path: /(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: otus-service
-                port:
-                  number: 9000
-          - path: /otusapp/achernyavskiy/(.*)
+          - path: /(/|$)(.*)
             pathType: Prefix
             backend:
               service:
