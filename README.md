@@ -1,4 +1,4 @@
-##Kubernetes/Docker/SpringBoot infrastructure solution
+Kubernetes/Docker/SpringBoot infrastructure solution
 
 Required: k8s/minikube, docker
 
