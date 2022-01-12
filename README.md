@@ -9,8 +9,10 @@ __1) For local execution__
     mvn clean install
     at Dockerfile - fix "FROM amazoncorretto:17" according to your JAVA_HOME jdk   
     at k8s/deployment.yml fix image: achernyavskiy0n/otus-k8s according to your local image name
+    kubectl apply -f k8s/namespace.yml
     kubectl apply -f k8s
    
 __2) for remote execution__
 
-      kubectl apply -f k8s
+    kubectl apply -f k8s/namespace.yml
+    kubectl apply -f k8s
