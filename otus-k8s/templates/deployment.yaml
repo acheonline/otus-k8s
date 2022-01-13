@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: {{ .Chart.Name }}-ns
+  labels:
+    app.kubernetes.io/name: {{ include "otus-k8s.name" . }}
+    helm.sh/chart: {{ include "otus-k8s.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "otus-k8s.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      name: {{ .Chart.Name }}
+      labels:
+        app.kubernetes.io/name: {{ include "otus-k8s.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: web-port
+              containerPort: {{ .Values.configmap.SERVER_PORT }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+              port: web-port
+            initialDelaySeconds: 50
+            periodSeconds: 5
+            failureThreshold: 100
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: web-port
+            initialDelaySeconds: 1
+            timeoutSeconds: 2
+          envFrom:
+            - configMapRef:
+                name: otus-config
