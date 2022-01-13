@@ -24,13 +24,13 @@ spec:
             periodSeconds: 1
             httpGet:
               path: /health/readiness
-              port: 8000
+              port: web-port
             initialDelaySeconds: 1
             timeoutSeconds: 2
           livenessProbe:
             httpGet:
               path: /health/liveness
-              port: 8000
+              port: web-port
             initialDelaySeconds: 50
             periodSeconds: 5
             failureThreshold: 100
