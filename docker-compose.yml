@@ -1,0 +1,35 @@
+version: '3'
+services:
+  db:
+    container_name: postgres
+    image: 'postgres'
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    networks:
+      - private-network
+  user-service:
+    image: 'user-service'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    deploy:
+      replicas: 2
+    links:
+      - db
+    depends_on:
+      - db
+    ports:
+      - "8011-8019:8080"
+    networks:
+      - private-network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456
+networks:
+  private-network:
+    driver: bridge
