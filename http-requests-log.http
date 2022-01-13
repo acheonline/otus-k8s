@@ -1,0 +1,34 @@
+### updateUser
+PUT http://localhost:8011/user/2
+Content-Type: application/json
+
+{
+  "username": "updated",
+  "firstName": "upd",
+  "lastName": "dated",
+  "email": "upd@doe.com",
+  "phone": "+71112233344"
+}
+
+### addUser
+POST http://localhost:8011/user/?id=1
+Content-Type: application/json
+
+{
+  "username": "johndoe111",
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "bestjohn@doe.com",
+  "phone": "+71002003040"
+}
+
+### getById
+GET http://localhost:8011/user/2
+
+### getALL
+GET http://localhost:8011/user/
+
+### deleteById
+DELETE http://localhost:8011/user/2
+
+
