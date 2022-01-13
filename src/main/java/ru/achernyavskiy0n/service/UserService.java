@@ -29,14 +29,16 @@ public class UserService {
 
     public User putUserById(Integer id, User userUpdated) {
         User user = getUserById(id);
-        user.setFirstName(userUpdated.getFirstName());
-        user.setLastName(userUpdated.getLastName());
-        user.setPhone(userUpdated.getPhone());
-        user.setEmail(userUpdated.getEmail());
-        return this.repository.save(user);
+        if (user != null) {
+            user.setFirstName(userUpdated.getFirstName());
+            user.setLastName(userUpdated.getLastName());
+            user.setPhone(userUpdated.getPhone());
+            user.setEmail(userUpdated.getEmail());
+            return this.repository.save(user);
+        } else return null;
     }
 
-    public User addUser(User val) {
-        return this.repository.save(val);
+    public User addUser(User user) {
+        return this.repository.save(user);
     }
 }
