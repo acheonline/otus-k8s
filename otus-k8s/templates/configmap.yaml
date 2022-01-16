@@ -6,3 +6,6 @@ metadata:
 data:
   SERVER_PORT: '{{ .Values.configmap.SERVER_PORT }}'
   APPLICATION_NAME: {{ .Values.configmap.APPLICATION_NAME }}
+  POSTGRES_USERNAME: {{ .Values.postgresql.username }}
+  POSTGRESQL_DATABASE: {{ .Values.postgresql.database}}
+  DATASOURCE_URL: 'jdbc:postgresql://{{ .Values.postgresql.database}}:{{ .Values.postgresql.image.port }}/{{ .Values.postgresql.database}}'

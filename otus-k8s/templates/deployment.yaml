@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}
+  name: {{ .Chart.Name }}-deployment
   namespace: {{ .Chart.Name }}-ns
   labels:
     app.kubernetes.io/name: {{ include "otus-k8s.name" . }}
@@ -23,8 +23,24 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Chart.Name }}-config
+                  key: DATASOURCE_URL
+            - name: DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Chart.Name }}-config
+                  key: POSTGRES_USERNAME
+            - name: DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-secret
+                  key: POSTGRES_PASSWORD
           ports:
             - name: web-port
               containerPort: {{ .Values.configmap.SERVER_PORT }}
@@ -33,15 +49,15 @@ spec:
             httpGet:
               path: /health/liveness
               port: web-port
-            initialDelaySeconds: 50
+            initialDelaySeconds: 10
             periodSeconds: 5
-            failureThreshold: 100
             timeoutSeconds: 2
           readinessProbe:
             httpGet:
               path: /health/readiness
               port: web-port
             initialDelaySeconds: 1
+            periodSeconds: 5
             timeoutSeconds: 2
           envFrom:
             - configMapRef:
