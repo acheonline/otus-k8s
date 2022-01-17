@@ -4,10 +4,7 @@
 
 replicaCount: 2
 
-image:
-  repository: achernyavskiy0n/user-service
-  pullPolicy: IfNotPresent
-  tag: "latest"
+image: achernyavskiy0n/user-service
 
 service:
   type: NodePort
@@ -36,18 +33,14 @@ configmap:
   SERVER_PORT: 8000
   APPLICATION_NAME: otus-k8s-homework-application
 
-postgresql:
-  image:
-    name: bitnami/postgresql
-    pullPolicy: IfNotPresent
-    port: 5432
-  username: postgres
-  password: MTIzNDU2Cg==
-  database: postgres
+externalPostgresql:
+  postgresqlUsername: myuser
+  postgresqlPassword: MTIzNDU2Cg==
+  postgresqlDatabase: myapp
+  postgresqlHost: "postgres"
+  postgresqlPort: 5432
 
 migrationService:
   image: achernyavskiy0n/otus-service-db-init
-  pullPolicy: IfNotPresent
-  port: 5455
 
 

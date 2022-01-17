@@ -15,30 +15,11 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ .Chart.Name }}-init-db
+      name: {{ .Chart.Name }}-db-migration
     spec:
       restartPolicy: Never
-      initContainers:
-        - name: {{ .Chart.Name }}-db
-          image: "{{ .Values.postgresql.image.name }}"
-          env:
-            - name: POSTGRESQL_DATABASE
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ .Chart.Name }}-config
-                  key: POSTGRESQL_DATABASE
-            - name: POSTGRES_USERNAME
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ .Chart.Name }}-config
-                  key: POSTGRES_USERNAME
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Chart.Name }}-secret
-                  key: POSTGRES_PASSWORD
       containers:
-        - name: {{ .Chart.Name }}-migrate
+        - name: {{ .Chart.Name }}-db-update
           image: "{{ .Values.migrationService.image }}"
           env:
             - name: DATASOURCE_URL
@@ -50,10 +31,10 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: {{ .Chart.Name }}-config
-                  key: POSTGRES_USERNAME
+                  key: DATASOURCE_USERNAME
             - name: DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Chart.Name }}-secret
-                  key: POSTGRES_PASSWORD
+                  key: DATASOURCE_PASSWORD
   backoffLimit: 2

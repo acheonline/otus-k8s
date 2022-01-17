@@ -6,6 +6,7 @@ metadata:
 data:
   SERVER_PORT: '{{ .Values.configmap.SERVER_PORT }}'
   APPLICATION_NAME: {{ .Values.configmap.APPLICATION_NAME }}
-  POSTGRES_USERNAME: {{ .Values.postgresql.username }}
-  POSTGRESQL_DATABASE: {{ .Values.postgresql.database}}
-  DATASOURCE_URL: 'jdbc:postgresql://{{ .Values.postgresql.database}}:{{ .Values.postgresql.image.port }}/{{ .Values.postgresql.database}}'
+  DATASOURCE_USERNAME: {{ .Values.externalPostgresql.postgresqlUsername }}
+  DATASOURCE_URL: "jdbc:postgresql://postgres:5432/myapp"
+  POSTGRES_HOST: postgres
+  POSTGRES_PORT: "5432"
