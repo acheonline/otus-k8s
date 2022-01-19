@@ -19,6 +19,5 @@ __2) for remote execution (k8s only)__
 
 __3) for remote execution (helm/k8s/docker)__
 
-    kubectl create -f k8s/namespace.yml
-    helm install pg bitnami/postgresql -f ./pg-values.yaml -n otus-ns
-    helm install otus-k8s ./otus-k8s
+    helm install pg bitnami/postgresql -f ./pg-values.yaml
+    helm install otus ./otus-k8s
