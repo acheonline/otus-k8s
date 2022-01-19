@@ -1,13 +1,14 @@
 version: '3'
 services:
-  db:
+  postgres:
+    container_name: 'postgres'
     image: bitnami/postgresql
     ports:
       - "5432:5432"
     environment:
       POSTGRESQL_PASSWORD: 123456
-      POSTGRESQL_USERNAME: postgres
-      POSTGRESQL_DATABASE: postgres
+      POSTGRESQL_USERNAME: myuser
+      POSTGRESQL_DATABASE: myapp
     networks:
       - private-network
   user-service:
@@ -18,17 +19,17 @@ services:
     deploy:
       replicas: 2
     links:
-      - db
+      - postgres
     depends_on:
-      - db
+      - postgres
     ports:
       - "8011-8019:8080"
     networks:
       - private-network
     environment:
       JAVA_OPTS: "-Xss256k"
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db/postgres
-      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+      SPRING_DATASOURCE_USERNAME: myuser
       SPRING_DATASOURCE_PASSWORD: 123456
 networks:
   private-network:

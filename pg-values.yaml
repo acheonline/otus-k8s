@@ -1,6 +1,6 @@
 fullnameOverride: postgres
 postgresqlUsername: myuser
-postgresqlPassword: "123456"
+postgresqlPassword: passwd
 postgresqlDatabase: myapp
 
 service:

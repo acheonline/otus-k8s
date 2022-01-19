@@ -2,24 +2,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Chart.Name }}-deployment
-  namespace: {{ .Chart.Name }}-ns
   labels:
-    app.kubernetes.io/name: {{ include "otus-k8s.name" . }}
-    helm.sh/chart: {{ include "otus-k8s.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "otus-k8s.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "otus-k8s.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- include "otus-k8s.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       name: {{ .Chart.Name }}
       labels:
-        app.kubernetes.io/name: {{ include "otus-k8s.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- include "otus-k8s.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - name: {{ .Chart.Name }}

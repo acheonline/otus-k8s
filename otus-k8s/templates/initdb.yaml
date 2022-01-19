@@ -2,12 +2,8 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ .Chart.Name }}-init-db
-  namespace: {{ .Chart.Name }}-ns
   labels:
-    app.kubernetes.io/name: {{ include "otus-k8s.name" . }}
-    helm.sh/chart: {{ include "otus-k8s.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "otus-k8s.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": post-install
     "helm.sh/hook-weight": "-5"
@@ -18,6 +14,21 @@ spec:
       name: {{ .Chart.Name }}-db-migration
     spec:
       restartPolicy: Never
+      initContainers:
+        - name: check-db-ready
+          image: 'bitnami/postgresql:latest'
+          command: ['sh', '-c', 'until pg_isready -h $POSTGRES_HOST -p $POSTGRES_PORT; do echo waiting for database; sleep 2; done;']
+          env:
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Chart.Name }}-config
+                  key: POSTGRES_HOST
+            - name: POSTGRES_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Chart.Name }}-config
+                  key: POSTGRES_PORT
       containers:
         - name: {{ .Chart.Name }}-db-update
           image: "{{ .Values.migrationService.image }}"
