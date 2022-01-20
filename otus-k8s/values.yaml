@@ -26,7 +26,7 @@ configmap:
   APPLICATION_NAME: otus-k8s-homework-application
 externalPostgresql:
   postgresqlUsername: myuser
-  postgresqlPassword: cGFzc3dkJQo=
+  postgresqlPassword: cGFzc3dk
   postgresqlDatabase: myapp
   postgresqlHost: "postgres"
   postgresqlPort: 5432

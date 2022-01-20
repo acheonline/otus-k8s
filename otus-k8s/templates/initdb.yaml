@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Chart.Name }}-init-db
+  name: {{ .Chart.Name }}-db-migration
   labels:
     {{- include "otus-k8s.labels" . | nindent 4 }}
   annotations:
@@ -16,7 +16,7 @@ spec:
       restartPolicy: Never
       initContainers:
         - name: check-db-ready
-          image: 'bitnami/postgresql:latest'
+          image: 'bitnami/postgresql'
           command: ['sh', '-c', 'until pg_isready -h $POSTGRES_HOST -p $POSTGRES_PORT; do echo waiting for database; sleep 2; done;']
           env:
             - name: POSTGRES_HOST

@@ -12,12 +12,14 @@ __1) For local execution (k8s only)__
     kubectl apply -f k8s/namespace.yml
     kubectl apply -f k8s
    
-__2) for remote execution (k8s only)__
+__2) from dockerhub execution (k8s only)__
 
     kubectl apply -f k8s/namespace.yml
     kubectl apply -f k8s
 
-__3) for remote execution (helm/k8s/docker)__
+__3) from dockerhub execution (helm/k8s/docker)__
 
-    helm install pg bitnami/postgresql -f ./pg-values.yaml
+    helm install my-db \
+    --set fullnameOverride=postgres,postgresqlUsername=myuser,postgresqlPassword=passwd,postgresqlDatabase=myapp \
+    bitnami/postgresql
     helm install otus ./otus-k8s
