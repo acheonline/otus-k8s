@@ -19,7 +19,18 @@ management:
       probes.enabled: true
       livenessState.enabled: true
       readinessState.enabled: true
+    prometheus:
+      enabled: true
   endpoints:
     web:
+      exposure:
+        include: health,prometheus
       base-path: /
       path-mapping.health: health
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true

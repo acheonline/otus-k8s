@@ -2,13 +2,13 @@ version: '3'
 services:
   postgres:
     container_name: 'postgres'
-    image: bitnami/postgresql
+    image: postgres:latest
     ports:
       - "5432:5432"
     environment:
-      POSTGRESQL_PASSWORD: 123456
-      POSTGRESQL_USERNAME: myuser
-      POSTGRESQL_DATABASE: myapp
+      POSTGRES_PASSWORD: passwd
+      POSTGRES_USER: myuser
+      POSTGRES_DB: myapp
     networks:
       - private-network
   user-service:
@@ -17,7 +17,7 @@ services:
       context: .
       dockerfile: Dockerfile
     deploy:
-      replicas: 2
+      replicas: 1
     links:
       - postgres
     depends_on:
@@ -28,9 +28,9 @@ services:
       - private-network
     environment:
       JAVA_OPTS: "-Xss256k"
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
-      SPRING_DATASOURCE_USERNAME: myuser
-      SPRING_DATASOURCE_PASSWORD: 123456
+      DATASOURCE_URL: jdbc:postgresql://postgres:5432/myapp
+      DATASOURCE_USERNAME: myuser
+      DATASOURCE_PASSWORD: passwd
 networks:
   private-network:
     driver: bridge
