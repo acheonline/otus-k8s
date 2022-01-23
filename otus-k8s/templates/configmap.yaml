@@ -5,7 +5,11 @@ metadata:
 data:
   SERVER_PORT: '{{ .Values.configmap.SERVER_PORT }}'
   APPLICATION_NAME: {{ .Values.configmap.APPLICATION_NAME }}
+
   DATASOURCE_USERNAME: {{ .Values.externalPostgresql.postgresqlUsername }}
-  DATASOURCE_URL: "jdbc:postgresql://postgres:5432/myapp"
-  POSTGRES_HOST: postgres
+  DATASOURCE_URL: "jdbc:postgresql://{{ .Chart.Name}}-{{ .Values.externalPostgresql.postgresqlHost}}:{{ .Values.externalPostgresql.postgresqlPort}}/{{ .Values.externalPostgresql.postgresqlDatabase}}"
+
+  POSTGRES_HOST: {{ .Chart.Name}}-{{ .Values.externalPostgresql.postgresqlHost }}
   POSTGRES_PORT: "5432"
+  POSTGRES_DB: {{ .Values.externalPostgresql.postgresqlDatabase }}
+  POSTGRES_USERNAME: {{ .Values.externalPostgresql.postgresqlUsername }}
