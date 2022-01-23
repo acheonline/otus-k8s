@@ -16,19 +16,24 @@ spec:
       restartPolicy: Never
       initContainers:
         - name: check-db-ready
-          image: 'bitnami/postgresql'
-          command: ['sh', '-c', 'until pg_isready -h $POSTGRES_HOST -p $POSTGRES_PORT; do echo waiting for database; sleep 2; done;']
+          image: postgres:latest
           env:
             - name: POSTGRES_HOST
               valueFrom:
                 configMapKeyRef:
-                  name: {{ .Chart.Name }}-config
                   key: POSTGRES_HOST
+                  name: {{ .Chart.Name }}-config
             - name: POSTGRES_PORT
               valueFrom:
                 configMapKeyRef:
-                  name: {{ .Chart.Name }}-config
                   key: POSTGRES_PORT
+                  name: {{ .Chart.Name }}-config
+          command:
+            - sh
+            - "-c"
+            - |
+              until pg_isready -h $POSTGRES_HOST  -p  $POSTGRES_PORT;
+              do echo waiting for database; sleep 2; done;
       containers:
         - name: {{ .Chart.Name }}-db-update
           image: "{{ .Values.migrationService.image }}"
