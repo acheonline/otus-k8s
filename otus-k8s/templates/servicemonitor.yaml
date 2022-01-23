@@ -1,0 +1,20 @@
+helm {{- if .Values.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .Chart.Name }}-servicemonitor
+  labels:
+    {{- include "otus-k8s.labels" . | nindent 4 }}
+spec:
+  jobLabel: {{ .Chart.Name }}-servicemonitor-job
+  namespaceSelector:
+    matchNames:
+      - default
+  selector:
+    matchLabels:
+      {{- include "otus-k8s.selectorLabels" . | nindent 6 }}
+  endpoints:
+    - port: http
+      interval: 15s
+      path: /prometheus
+{{- end }}

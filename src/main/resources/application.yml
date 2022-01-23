@@ -23,3 +23,9 @@ management:
     web:
       base-path: /
       path-mapping.health: health
+      exposure:
+        include: health,prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true

@@ -33,4 +33,8 @@ externalPostgresql:
 migrationService:
   image: achernyavskiy0n/otus-service-db-init
 
+metrics:
+  serviceMonitor:
+    enabled: true
+
 
