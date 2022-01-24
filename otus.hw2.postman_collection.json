@@ -20,7 +20,8 @@
 					}
 				},
 				"url": {
-					"raw": "arch.homework/user/?id=1",
+					"raw": "http://arch.homework/user/",
+					"protocol": "http",
 					"host": [
 						"arch",
 						"homework"
@@ -28,12 +29,6 @@
 					"path": [
 						"user",
 						""
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "1"
-						}
 					]
 				}
 			},
@@ -45,14 +40,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "arch.homework/user/2",
+					"raw": "http://arch.homework/user/1",
+					"protocol": "http",
 					"host": [
 						"arch",
 						"homework"
 					],
 					"path": [
 						"user",
-						"2"
+						"1"
 					]
 				}
 			},
@@ -64,7 +60,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "arch.homework/user/",
+					"raw": "http://arch.homework/user/",
+					"protocol": "http",
 					"host": [
 						"arch",
 						"homework"
@@ -92,12 +89,13 @@
 					}
 				},
 				"url": {
-					"raw": "arch.homework/user/1",
+					"raw": "http:/arch.homework/user/1",
 					"host": [
-						"arch",
-						"homework"
+						"http"
 					],
+					"port": "",
 					"path": [
+						"arch.homework",
 						"user",
 						"1"
 					]
@@ -111,7 +109,8 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "arch.homework/user/1",
+					"raw": "http://arch.homework/user/1",
+					"protocol": "http",
 					"host": [
 						"arch",
 						"homework"
