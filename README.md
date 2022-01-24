@@ -21,3 +21,7 @@ __3) from dockerhub execution (helm/k8s/docker)__
 
     
     helm install otus ./otus-k8s
+ 
+ Postman check execution:
+    
+    newman run otus.hw2.postman_collection.json
