@@ -30,8 +30,8 @@ public class UserService {
     public User putUserById(Integer id, User userUpdated) {
         User user = getUserById(id);
         if (user != null) {
-            user.setFirstName(userUpdated.getFirstName());
-            user.setLastName(userUpdated.getLastName());
+            user.setFirstname(userUpdated.getFirstname());
+            user.setLastname(userUpdated.getLastname());
             user.setPhone(userUpdated.getPhone());
             user.setEmail(userUpdated.getEmail());
             return this.repository.save(user);
