@@ -19,7 +19,9 @@ __2) from dockerhub execution (k8s only)__
 
 __3) from dockerhub execution (helm/k8s/docker)__
 
-    helm install my-db \
-    --set fullnameOverride=postgres,postgresqlUsername=myuser,postgresqlPassword=passwd,postgresqlDatabase=myapp \
-    bitnami/postgresql
+    
     helm install otus ./otus-k8s
+ 
+ Postman check execution:
+    
+    newman run otus.hw2.postman_collection.json

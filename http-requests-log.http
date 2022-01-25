@@ -1,34 +1,32 @@
-### updateUser
-PUT http://localhost:8011/user/2
-Content-Type: application/json
-
-{
-  "username": "updated",
-  "firstName": "upd",
-  "lastName": "dated",
-  "email": "upd@doe.com",
-  "phone": "+71112233344"
-}
-
 ### addUser
-POST http://localhost:8011/user/?id=1
+POST http://localhost:8012/user/
 Content-Type: application/json
 
 {
-  "username": "johndoe111",
-  "firstName": "John",
-  "lastName": "Doe",
+  "firstname": "John",
+  "lastname": "Doe",
   "email": "bestjohn@doe.com",
   "phone": "+71002003040"
 }
 
 ### getById
-GET http://localhost:8011/user/2
+GET http://localhost:8012/user/9
 
 ### getALL
-GET http://localhost:8011/user/
+GET http://localhost:8012/user/
+
+### updateUser
+PUT http://localhost:8012/user/9
+Content-Type: application/json
+
+{
+  "firstname": "upd",
+  "lastname": "dated",
+  "email": "upd@doe.com",
+  "phone": "+71112233344"
+}
 
 ### deleteById
-DELETE http://localhost:8011/user/2
+DELETE http://localhost:8012/user/8
 
 
