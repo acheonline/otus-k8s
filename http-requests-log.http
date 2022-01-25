@@ -3,7 +3,6 @@ POST http://localhost:8012/user/
 Content-Type: application/json
 
 {
-  "username": "johndoe111",
   "firstname": "John",
   "lastname": "Doe",
   "email": "bestjohn@doe.com",
@@ -21,7 +20,6 @@ PUT http://localhost:8012/user/9
 Content-Type: application/json
 
 {
-  "username": "updated",
   "firstname": "upd",
   "lastname": "dated",
   "email": "upd@doe.com",
