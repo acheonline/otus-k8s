@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"username\": \"johndoe111\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"bestjohn@doe.com\",\n  \"phone\": \"+71002003040\"\n}",
+					"raw": "{\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe\",\n  \"email\": \"bestjohn@doe.com\",\n  \"phone\": \"+71002003040\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -81,7 +81,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"username\": \"updated\",\n  \"firstName\": \"upd\",\n  \"lastName\": \"dated\",\n  \"email\": \"upd@doe.com\",\n  \"phone\": \"+71112233344\"\n}",
+					"raw": "{\n  \"firstname\": \"upd\",\n  \"lastname\": \"dated\",\n  \"email\": \"upd@doe.com\",\n  \"phone\": \"+71112233344\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"

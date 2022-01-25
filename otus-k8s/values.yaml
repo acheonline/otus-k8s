@@ -1,5 +1,5 @@
 replicaCount: 2
-image: achernyavskiy0n/user-service
+image: achernyavskiy0n/user-service:latest
 service:
   type: NodePort
   port: 9000
@@ -31,6 +31,6 @@ externalPostgresql:
   postgresqlHost: "postgres"
   postgresqlPort: 5432
 migrationService:
-  image: achernyavskiy0n/otus-service-db-init
+  image: achernyavskiy0n/otus-service-db-init:latest
 
 
