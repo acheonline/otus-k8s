@@ -34,5 +34,3 @@ management:
     distribution:
       percentiles-histogram:
         "[http.server.requests]": true
-      exposure:
-        include: health,prometheus

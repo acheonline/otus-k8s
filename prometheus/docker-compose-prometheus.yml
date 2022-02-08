@@ -1,14 +1,45 @@
 version: '3.7'
 
 volumes:
-  prometheus_data: {}
-  grafana_data: {}
+  prometheus_data: { }
+  grafana_data: { }
 
 networks:
-  front-tier:
   back-tier:
+    driver: bridge
 
 services:
+  postgres:
+    container_name: 'postgres'
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: passwd
+      POSTGRES_USER: myuser
+      POSTGRES_DB: myapp
+    networks:
+      - back-tier
+  user-service:
+    image: 'user-service'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    deploy:
+      replicas: 1
+    links:
+      - postgres
+    depends_on:
+      - postgres
+    ports:
+      - "8011:8080"
+    networks:
+      - back-tier
+    environment:
+      JAVA_OPTS: "-Xss256k"
+      DATASOURCE_URL: jdbc:postgresql://postgres:5432/myapp
+      DATASOURCE_USERNAME: myuser
+      DATASOURCE_PASSWORD: passwd
 
   prometheus:
     image: prom/prometheus:v2.1.0
@@ -22,10 +53,31 @@ services:
       - '--web.console.templates=/usr/share/prometheus/consoles'
     ports:
       - "9090:9090"
-    links:
-      - cadvisor:cadvisor
+    networks:
+      - back-tier
+    restart: always
     depends_on:
-      - cadvisor
+      - user-service
+      - postgres
+    links:
+      - user-service
+      - postgres
+  grafana:
+    image: grafana/grafana
+    depends_on:
+      - prometheus
+      - user-service
+      - postgres
+    links:
+      - user-service
+      - postgres
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    env_file:
+      - ./grafana/config.monitoring
     networks:
       - back-tier
     restart: always
@@ -63,20 +115,3 @@ services:
     restart: always
     deploy:
       mode: global
-
-  grafana:
-    image: grafana/grafana
-    user: "472"
-    depends_on:
-      - prometheus
-    ports:
-      - "3000:3000"
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ./grafana/provisioning/:/etc/grafana/provisioning/
-    env_file:
-      - ./grafana/config.monitoring
-    networks:
-      - back-tier
-      - front-tier
-    restart: always

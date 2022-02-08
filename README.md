@@ -4,24 +4,35 @@ This example shows how works spring boot application wihin main infrastructure a
 
 ###### _Required: helm, k8s/minikube, docker_
 
-__1) For local execution (k8s only)__
+Start minikube cluster
 
-    mvn clean install
-    at Dockerfile - fix "FROM amazoncorretto:17" according to your JAVA_HOME jdk   
-    at k8s/deployment.yml fix image: achernyavskiy0n/otus-k8s according to your local image name
-    kubectl apply -f k8s/namespace.yml
-    kubectl apply -f k8s
-   
-__2) from dockerhub execution (k8s only)__
+    minikube start 
+Delete all resources and namespace of previous nginx-controller, check total delete by command `kubectl get namespace` - there should be no nginx namespaces. If false, delete manually)
 
-    kubectl apply -f k8s/namespace.yml
-    kubectl apply -f k8s
+    minikube addons disable ingress
+Add namespace monitoring. Set k8s context to it. Search and update local Kube_prom_stack and Nginx-Controller repos for Helm installation
 
-__3) from dockerhub execution (helm/k8s/docker)__
+    kubectl create namespace monitoring
+    kubectl config set-context --current --namespace=monitoring
+    helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    helm repo update
+    helm install nginx ingress-nginx/ingress-nginx -f nginx-ingress.yaml --atomic
+Install kube-prom-stack via Helm
 
+    helm install prom prometheus-community/kube-prometheus-stack -f prometheus.yaml --atomic
+Execute Grafana
+
+    kubectl port-forward service/prom-grafana 9000:80
+Execute Prometheus
+
+    kubectl port-forward service/prom-kube-prometheus-stack-prometheus 9090:9090
+
+Install project templates via Helm
     
-    helm install otus ./otus-k8s
+    kubectl apply -f ./k8s/namespace.yml
+    helm install otus ./otus-k8s --namespace otus-ns
  
- Postman check execution:
+Postman check execution:
     
     newman run otus.hw2.postman_collection.json
