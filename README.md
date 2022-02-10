@@ -4,43 +4,43 @@ This example shows how works canary deployment solution via Istio Service Mesh. 
 
 ###### _Required: k8s/minikube, docker_
 
-####Start minikube cluster (driver - hyperkit, 4Gb ram, 4CPUs, CNI)
+#### Start minikube cluster (driver - hyperkit, 4Gb ram, 4CPUs, CNI)
 
     minikube start --driver hyperkit --cpus=4 --memory=8g --cni=flannel
-####Install Istio on Minikube
+#### Install Istio on Minikube
 
     curl -L https://git.io/getLatestIstio | sh -
     cd istio-1.12.2 (or newest version - see your logs)
 To configure the istioctl client tool for your workstation, add the path directory to your environment path variable with:
     
     export PATH="$PATH:.../istio-1.12.2/bin (instead multipoint put your specific path to istio directory)
-####Check Istio before install
+#### Check Istio before install
     
     istioctl x precheck
-####Install Istio
+#### Install Istio
 
     istioctl install
 
-####Start Minikube tunnel in another terminal. It will work permanently
+#### Start Minikube tunnel in another terminal. It will work permanently
 
     minikube tunnel
 
-####Start all project environment 
+#### Start all project environment 
 2 services with different versions, gateway to collect all traffic from them and virtualservice for routing traffic from gateway and divide it 50/50 between 2 services)
 
     kubectl create namespace istio
     kubectl apply -f ./istio --namespace istio
-####Check VirtualService is deployed
+#### Check VirtualService is deployed
 
     kubectl get vs --namespace istio
-####Check GateWay is deployed
+#### Check GateWay is deployed
 
     kubectl get gw --namespace istio
-####Check All the Pods of Project are deployed
+#### Check All the Pods of Project are deployed
 
     kubectl get all --namespace istio
 
-####Check that traffic is routing according the rules. Get service istio
+#### Check that traffic is routing according the rules. Get service istio
 
     kubectl get svc -n istio-system
 
@@ -51,7 +51,7 @@ Find yot host to interact at column "EXTERNAL-IP" cross "istio-ingressgatway". I
 Call that host several times in yor browser and see 2 different types of answer.
 That's all done. Traffic is routing.
 
-####echo-service-v2:
+#### echo-service-v2:
 
     Hostname: echo-server-v2-8556f58c4f-8md7z
     
@@ -92,7 +92,7 @@ That's all done. Traffic is routing.
     Request Body:
     -no body in request-
 
-####echo-service-v1:
+#### echo-service-v1:
 
     CLIENT VALUES:
     client_address=10.244.0.3
