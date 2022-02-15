@@ -127,7 +127,7 @@ That's all done. Traffic is routing.
     BODY:
     -no body in request-
 
-### **Monitor yor architecture with Kiali**
+### **Monitor your traffic routing Istio architecture with Kiali**
 After you've been installed your Istio and execute `minikube tunnel` in separate terminal, you should deploy Kiali with Helm
 
     helm install \
