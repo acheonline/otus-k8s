@@ -128,7 +128,7 @@ That's all done. Traffic is routing.
     -no body in request-
 
 ### **Monitor yor architecture with Kiali**
-After you've been installed your Istio and execute `minikube tunnel` and separate terminal, you should deploy Kiali with Helm
+After you've been installed your Istio and execute `minikube tunnel` in separate terminal, you should deploy Kiali with Helm
 
     helm install \
     --namespace istio-system \
@@ -147,11 +147,11 @@ Wait for success deployment
 Then execute port-forwarding
 
     kubectl port-forward svc/kiali 20001:20001 -n istio-system
-Or execute
+Or execute (will be the same result)
 
     istioctl dashboard kiali
 
-Then add istio-injection (caused namespace labeled). Customize preferred namespace.
+Then add istio-injection (will cause namespace labeled). Customize preferred namespace.
 
     kubectl label namespace istio istio-injection=enabled
 Then add prometheus for scraping 
