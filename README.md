@@ -126,3 +126,37 @@ That's all done. Traffic is routing.
     x-request-id=02a3c26d-27e7-4744-ba83-3025c65efb1b
     BODY:
     -no body in request-
+
+### **Monitor yor architecture with Kiali**
+After you've been installed your Istio and execute `minikube tunnel` and separate terminal, you should deploy Kiali with Helm
+
+    helm install \
+    --namespace istio-system \
+    --set auth.strategy="anonymous" \
+    --repo https://kiali.org/helm-charts \
+    kiali-server \
+    kiali-server
+Wait for success deployment
+
+    NAME: kiali-server
+    LAST DEPLOYED: Tue Feb 15 07:12:18 2022
+    NAMESPACE: istio-system
+    STATUS: deployed
+    REVISION: 1
+    TEST SUITE: None
+Then execute port-forwarding
+
+    kubectl port-forward svc/kiali 20001:20001 -n istio-system
+Or execute
+
+    istioctl dashboard kiali
+
+Then add istio-injection (caused namespace labeled). Customize preferred namespace.
+
+    kubectl label namespace istio istio-injection=enabled
+Then add prometheus for scraping 
+
+     kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.13/samples/addons/prometheus.yaml
+Then if your main project is already installed in specific namespace @istio you will find in your Kiali dashboard picture like this:
+
+![](kiali-dashboard.png)

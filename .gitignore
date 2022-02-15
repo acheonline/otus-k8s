@@ -1,4 +1,4 @@
 target/
 .idea/
 .git/
-istio-1.12.2/
+istio-*/
