@@ -1,27 +1,13 @@
-### **Kubernetes/Docker/SpringBoot infrastructure solution**
+### **API GATEWAY**
 
-This example shows how works spring boot application wihin main infrastructure architecture patterns - scalability service deployment platform pattern, service-discovery pattern, liveness/readiness probe pattern, api gateway pattern
+This example shows api gateway pattern
 
-###### _Required: helm, k8s/minikube, docker_
+###### _Required: k8s/minikube, docker_
 
-__1) For local execution (k8s only)__
-
-    mvn clean install
-    at Dockerfile - fix "FROM amazoncorretto:17" according to your JAVA_HOME jdk   
-    at k8s/deployment.yml fix image: achernyavskiy0n/otus-k8s according to your local image name
-    kubectl apply -f k8s/namespace.yml
-    kubectl apply -f k8s
-   
-__2) from dockerhub execution (k8s only)__
-
-    kubectl apply -f k8s/namespace.yml
-    kubectl apply -f k8s
-
-__3) from dockerhub execution (helm/k8s/docker)__
-
-    
-    helm install otus ./otus-k8s
+    kubectl create namespace gw
+    kubectl apply -f api-gateway-bff-pattern/identity -n gw
+    kubectl apply -f api-gateway-bff-pattern/gw -n gw
  
  Postman check execution:
     
-    newman run otus.hw2.postman_collection.json
+    newman run postman.json
