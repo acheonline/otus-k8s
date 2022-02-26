@@ -4,7 +4,7 @@ This example shows how works canary deployment solution via Istio Service Mesh. 
 
 ###### _Required: k8s/minikube, docker_
 
-#### Start minikube cluster (driver - hyperkit, 4Gb ram, 4CPUs, CNI)
+#### Start minikube cluster (driver - hyperkit, 8Gb ram, 4CPUs, CNI)
 
     minikube start --driver hyperkit --cpus=4 --memory=8g --cni=flannel
 #### Install Istio on Minikube
