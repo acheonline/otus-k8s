@@ -10,3 +10,7 @@ This example shows api gateway pattern
     kubectl create namespace gw
     kubectl apply -f api-gateway-bff-pattern/identity -n gw
     kubectl apply -f api-gateway-bff-pattern/gw -n gw
+
+#### Execute Postman Collection
+
+    newman run api-gateway.postman_collection.json

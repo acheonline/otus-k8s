@@ -1,0 +1,586 @@
+{
+	"info": {
+		"_postman_id": "d29792fc-794e-4720-ac25-c3b2f4b4e34b",
+		"name": "Api-Gateway",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "регистрация пользователя 2",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"jwt2\", \"\");",
+							"pm.collectionVariables.set(\"test_username2\", pm.variables.replaceIn('{{$randomUserName}}'));",
+							"pm.collectionVariables.set(\"test_password2\", pm.variables.replaceIn('{{$randomPassword}}'));",
+							"pm.collectionVariables.set(\"test_email2\", pm.variables.replaceIn('{{$randomEmail}}'));"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code must be 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"console.log(pm.request.body.raw);",
+							"console.log(pm.response.json());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"{{test_username2}}\",\n  \"password\": \"{{test_password2}}\",\n  \"email\": \"{{test_email2}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUri}}/registration",
+					"host": [
+						"{{baseUri}}"
+					],
+					"path": [
+						"registration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "проверка, что получение профиля пользователя недоступно без логина",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code must be 401\", () => {",
+							"    pm.response.to.have.status(401);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localUri}}/me",
+					"host": [
+						"{{localUri}}"
+					],
+					"path": [
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "проверка, что изменение профиля пользователя недоступно без логина",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"email\", pm.variables.replaceIn('{{$randomEmail}}'));",
+							"pm.collectionVariables.set(\"firstName\", pm.variables.replaceIn('{{$randomFirstName}}'));",
+							"pm.collectionVariables.set(\"lastName\", pm.variables.replaceIn('{{$randomLastName}}'));",
+							"pm.collectionVariables.set(\"phone\", pm.variables.replaceIn('{{$randomPhoneNumber}}'));"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code must be 401\", () => {",
+							"    pm.response.to.have.status(401);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\": {{firstName}},\n\t\"lastName\": {{lastName}},\n\t\"email\": {{email}},\n\t\"phone\": {{phone}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUri}}/profile/:username/update",
+					"host": [
+						"{{baseUri}}"
+					],
+					"path": [
+						"profile",
+						":username",
+						"update"
+					],
+					"variable": [
+						{
+							"key": "username",
+							"value": "{{test_username}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "вход пользователя 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code must be 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Test token return\", () => {",
+							"    const resp = pm.response.json();",
+							"",
+							"    pm.expect(resp.token).not.to.be.null;",
+							"",
+							"    pm.collectionVariables.set(\"jwt\", resp.token);",
+							"});",
+							"",
+							"console.log(pm.request.body.raw);",
+							"console.log(pm.response.json());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{test_username}}\",\n    \"password\": \"{{test_password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUri}}/login",
+					"host": [
+						"{{baseUri}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "изменения профиля пользователя №1",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"email\", pm.variables.replaceIn('{{$randomEmail}}'));",
+							"pm.collectionVariables.set(\"firstName\", pm.variables.replaceIn('{{$randomFirstName}}'));",
+							"pm.collectionVariables.set(\"lastName\", pm.variables.replaceIn('{{$randomLastName}}'));",
+							"pm.collectionVariables.set(\"phone\", pm.variables.replaceIn('8-(911)-000-00-00'));"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code must be 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"console.log(pm.request.body.raw);",
+							"console.log(pm.response.json());",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstName\": \"{{firstName}}\",\r\n  \"lastName\": \"{{lastName}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"phone\": \"{{phone}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUri}}/profile/:username/update",
+					"host": [
+						"{{baseUri}}"
+					],
+					"path": [
+						"profile",
+						":username",
+						"update"
+					],
+					"variable": [
+						{
+							"key": "username",
+							"value": "{{test_username}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "проверка, что получение профиля пользователя недоступно без логина Copy",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Test changed profile\", () => {",
+							"    const resp = pm.response.json();",
+							"",
+							"    pm.expect(resp).to.have.all.keys('username', 'firstName', 'lastName', 'email', 'phone');",
+							"",
+							"    pm.expect(resp.username).to.eql(pm.collectionVariables.get(\"test_username\"));",
+							"    pm.expect(resp.firstName).to.eql(pm.collectionVariables.get(\"firstName\"));",
+							"    pm.expect(resp.lastName).to.eql(pm.collectionVariables.get(\"lastName\"));",
+							"    pm.expect(resp.email).to.eql(pm.collectionVariables.get(\"email\"));",
+							"});",
+							"",
+							"console.log(pm.response.json());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUri}}/me",
+					"host": [
+						"{{baseUri}}"
+					],
+					"path": [
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "регистрация пользователя №1 Copy",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"jwt\", \"\");",
+							"pm.collectionVariables.set(\"test_username\", pm.variables.replaceIn('{{$randomUserName}}'));",
+							"pm.collectionVariables.set(\"test_password\", pm.variables.replaceIn('{{$randomPassword}}'));",
+							"pm.collectionVariables.set(\"test_email\", pm.variables.replaceIn('{{$randomEmail}}'));"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code must be 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"console.log(pm.request.body.raw);",
+							"console.log(pm.response.json());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"{{test_username}}\",\n  \"password\": \"{{test_password}}\",\n  \"email\": \"{{test_email}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUri}}/registration",
+					"host": [
+						"{{baseUri}}"
+					],
+					"path": [
+						"registration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "вход пользователя 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code must be 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Test token return\", () => {",
+							"    const resp = pm.response.json();",
+							"",
+							"    pm.expect(resp.token).not.to.be.null;",
+							"",
+							"    pm.collectionVariables.set(\"jwt2\", resp.token);",
+							"});",
+							"",
+							"console.log(pm.request.body.raw);",
+							"console.log(pm.response.json());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{test_username}}\",\n    \"password\": \"{{test_password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUri}}/login",
+					"host": [
+						"{{baseUri}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "проверка, что пользователь 2 не может получить профиль пользователя 1",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code must be 401\", () => {",
+							"    pm.response.to.have.status(401);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUri}}/profile/:username",
+					"host": [
+						"{{baseUri}}"
+					],
+					"path": [
+						"profile",
+						":username"
+					],
+					"variable": [
+						{
+							"key": "username",
+							"value": "{{test_username}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUri",
+			"value": "http://arch.homework:9001",
+			"type": "string"
+		},
+		{
+			"key": "localUri",
+			"value": "http://localhost:8081",
+			"type": "string"
+		},
+		{
+			"value": "",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "jwt",
+			"value": ""
+		},
+		{
+			"key": "test_username",
+			"value": ""
+		},
+		{
+			"key": "test_password",
+			"value": ""
+		},
+		{
+			"key": "test_email",
+			"value": ""
+		},
+		{
+			"key": "updated_email",
+			"value": ""
+		},
+		{
+			"key": "updated_firstName",
+			"value": ""
+		},
+		{
+			"key": "updated_lastName",
+			"value": ""
+		},
+		{
+			"key": "updated_phone",
+			"value": ""
+		},
+		{
+			"key": "email",
+			"value": ""
+		},
+		{
+			"key": "firstName",
+			"value": ""
+		},
+		{
+			"key": "lastName",
+			"value": ""
+		},
+		{
+			"key": "phone",
+			"value": ""
+		},
+		{
+			"key": "jwt2",
+			"value": ""
+		},
+		{
+			"key": "test_username2",
+			"value": ""
+		},
+		{
+			"key": "test_password2",
+			"value": ""
+		},
+		{
+			"key": "test_email2",
+			"value": ""
+		}
+	]
+}
