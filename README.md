@@ -1,8 +1,34 @@
 ### **API GATEWAY**
 
-This example shows api gateway pattern
+Реализация API-GATEWAY.
 
-###### _Required: k8s/minikube, docker_
+###### _Требуется для установки: k8s/minikube, docker_
+
+#### Архитектура и основные сценарии:
+
+![Main Architecture of solution](pics/architecture.jpg)
+
+1) Регистрация пользователя
+
+![registration](pics/registration.jpg)
+
+2) Запрос своего профиля без ключа
+
+![auth-no-token](pics/auth-no-token.jpg)
+
+3) Запрос своего профиля без ключа или с чужим ключом
+
+![auth-bad-token](pics/login.jpg)
+
+4) Запрос профиля авторизованного пользователя
+
+![get-auth-profile](pics/auth-profile.jpg)
+
+5) Изменение профиля авторизованного пользователя
+
+![update-auth-profile](pics/auth-update-profile.jpg)
+
+#### Инсталляция решения:
 
     minikube start --driver hyperkit --cpus=2 --memory=8G --addons=ingress
     minikube ip (get ip)
