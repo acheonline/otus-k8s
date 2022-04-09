@@ -24,6 +24,11 @@ Install kube-prom-stack via Helm
 Execute Grafana
 
     kubectl port-forward service/prom-grafana 9000:80
+
+Add Grafana JSON dashboard
+
+    Otus Homework Dashboard.json
+
 Execute Prometheus
 
     kubectl port-forward service/prom-kube-prometheus-stack-prometheus 9090:9090
