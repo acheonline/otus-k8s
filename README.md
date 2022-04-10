@@ -6,7 +6,7 @@ This example shows how works spring boot application wihin main infrastructure a
 
 Start minikube cluster
 
-    minikube start 
+    minikube start --driver hyperkit --cpus=4 --memory=8g 
 Delete all resources and namespace of previous nginx-controller, check total delete by command `kubectl get namespace` - there should be no nginx namespaces. If false, delete manually)
 
     minikube addons disable ingress
