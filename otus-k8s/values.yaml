@@ -1,40 +1,34 @@
-replicaCount: 2
-image: achernyavskiy0n/user-service:latest
+replicaCount: 1
 service:
   type: NodePort
-  port: 9000
+  identity:
+    port: 8082
+  billing:
+    port: 8081
+  order:
+    port: 8080
+  notes:
+    port: 8086
 ingress:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
   hosts:
     host: arch.homework
     paths:
-      - path: /(.*)
+      - path: /api/v1/identity
         pathType: Prefix
-        service: otus-service
-        port: 9000
-      - path: /otusapp/achernyavskiy/(.*)
+        service: identity-app-service
+        port: 8082
+      - path: /api/v1/order
         pathType: Prefix
-        service:  otus-service
-        port: 9000
-      - path: /(/|$)(.*)
+        service: order-app-service
+        port: 8080
+      - path: /api/v1/billing/account
         pathType: Prefix
-        service: otus-service
-        port: 9000
-configmap:
-  SERVER_PORT: 8000
-  APPLICATION_NAME: otus-k8s-homework-application
-externalPostgresql:
-  postgresqlUsername: myuser
-  postgresqlPassword: cGFzc3dk
-  postgresqlDatabase: myapp
-  postgresqlHost: "postgres"
-  postgresqlPort: 5432
-migrationService:
-  image: achernyavskiy0n/otus-service-db-init:latest
-
-metrics:
-  serviceMonitor:
-    enabled: true
-
+        service: billing-app-service
+        port: 8081
+      - path: /api/v1/notifications
+        pathType: Prefix
+        service: notification-app-service
+        port: 8086
 

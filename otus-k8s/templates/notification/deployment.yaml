@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}-deployment
+  name: {{ .Chart.Name }}-notes-deployment
   labels:
     {{- include "otus-k8s.labels" . | nindent 4 }}
 spec:
@@ -16,46 +16,41 @@ spec:
         {{- include "otus-k8s.selectorLabels" . | nindent 8 }}
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.configmap.SERVER_PORT }}"
+        prometheus.io/port: "{{ .Values.service.notes.port }}"
         prometheus.io/path: "/prometheus"
     spec:
       containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image }}"
+        - name: notes
+          image: achernyavskiy0n/notification-service:v1
           env:
-            - name: DATASOURCE_URL
+            - name: KAFKA_BOOTSTRAP_SERVERS
               valueFrom:
                 configMapKeyRef:
-                  name: {{ .Chart.Name }}-config
-                  key: DATASOURCE_URL
-            - name: DATASOURCE_USERNAME
+                  name: {{ .Chart.Name }}-notes-config
+                  key: KAFKA_BOOTSTRAP_SERVERS
+            - name: SERVER_PORT
               valueFrom:
                 configMapKeyRef:
-                  name: {{ .Chart.Name }}-config
-                  key: DATASOURCE_USERNAME
-            - name: DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Chart.Name }}-secret
-                  key: DATASOURCE_PASSWORD
+                  name: {{ .Chart.Name }}-notes-config
+                  key: SERVER_PORT
           ports:
-            - name: web-port
-              containerPort: {{ .Values.configmap.SERVER_PORT }}
+            - name: notes-port
+              containerPort: {{ .Values.service.notes.port }}
               protocol: TCP
           livenessProbe:
             httpGet:
               path: /health/liveness
-              port: web-port
+              port: notes-port
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
           readinessProbe:
             httpGet:
               path: /health/readiness
-              port: web-port
+              port: notes-port
             initialDelaySeconds: 10
             periodSeconds: 5
             timeoutSeconds: 2
           envFrom:
             - configMapRef:
-                name: {{ .Chart.Name }}-config
+                name: {{ .Chart.Name }}-notes-config
