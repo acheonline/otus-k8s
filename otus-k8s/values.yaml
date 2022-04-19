@@ -10,25 +10,18 @@ service:
   notes:
     port: 8086
 ingress:
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
   hosts:
-    host: arch.homework
     paths:
       - path: /api/v1/identity
-        pathType: Prefix
         service: identity-app-service
         port: 8082
       - path: /api/v1/order
-        pathType: Prefix
         service: order-app-service
         port: 8080
       - path: /api/v1/billing/account
-        pathType: Prefix
         service: billing-app-service
         port: 8081
       - path: /api/v1/notifications
-        pathType: Prefix
         service: notification-app-service
         port: 8086
 

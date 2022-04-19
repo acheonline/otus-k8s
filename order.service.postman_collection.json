@@ -1,0 +1,460 @@
+{
+	"info": {
+		"_postman_id": "998c6e67-a7f2-4cca-bc06-ab2992d16c2a",
+		"name": "Order-Service OTUS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1) создать пользователя в сервисе Биллинг",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"test_username\", pm.variables.replaceIn('{{$randomUserName}}'));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{test_username}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"{{$randomPassword}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUri}}/api/v1/identity/user/registration",
+					"host": [
+						"{{baseUri}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"identity",
+						"user",
+						"registration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2) Добавить деньги со счета клиента",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code must be 201\", () => {",
+							"    pm.response.to.have.status(201);",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.success).to.eql(true);",
+							"    pm.expect(responseJson.message).is.string;",
+							"});",
+							"",
+							"console.log(pm.request.body.raw);",
+							"console.log(pm.response.json());"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{test_username}}\",\n    \"amount\": {{test_amount}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUri}}/api/v1/billing/account/:username/increase/",
+					"host": [
+						"{{baseUri}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"billing",
+						"account",
+						":username",
+						"increase",
+						""
+					],
+					"variable": [
+						{
+							"key": "username",
+							"value": "{{test_username}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3) Создаем заказ, на который хватает денег",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code must be 201\", () => {",
+							"    pm.response.to.have.status(201);",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.success).to.eql(true);",
+							"    pm.expect(responseJson.message).is.string;",
+							"});",
+							"",
+							"console.log(pm.request.body.raw);",
+							"console.log(pm.response.json());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{test_username}}\",\n    \"amount\": {{test_amount}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUri}}/api/v1/order/create",
+					"host": [
+						"{{baseUri}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"order",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4) Проверяем положительный остаток счета",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code must be 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.success).to.eql(true);",
+							"    pm.expect(responseJson.message).not.to.be.null;",
+							"    pm.collectionVariables.set(\"test_amount\", parseFloat(responseJson.message));",
+							"});",
+							"console.log(pm.request.body.raw);",
+							"console.log(pm.response.json());",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUri}}/api/v1/billing/account/:username/status/",
+					"host": [
+						"{{baseUri}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"billing",
+						"account",
+						":username",
+						"status",
+						""
+					],
+					"variable": [
+						{
+							"key": "username",
+							"value": "{{test_username}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5) Проверяем уведомления в сервисе нотификаций",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code must be 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.success).to.eql(true);",
+							"    pm.expect(responseJson.message).not.to.be.null;",
+							"   ",
+							"   var data = pm.response.json().message;",
+							"",
+							"    pm.collectionVariables.set(\"messages\", data.split(',').length);",
+							"});",
+							"",
+							"console.log(pm.request.body.raw);",
+							"console.log(pm.response.json());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUri}}/api/v1/notifications/getAll",
+					"host": [
+						"{{baseUri}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"notifications",
+						"getAll"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6) Создаем заказ, на который НЕ хватает денег",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code must be 201\", () => {",
+							"    pm.response.to.have.status(201);",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.success).to.eql(false);",
+							"    pm.expect(responseJson.status).to.eql(500);",
+							"    pm.expect(responseJson.message).is.string;",
+							"});",
+							"",
+							"console.log(pm.request.body.raw);",
+							"console.log(pm.response.json());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{test_username}}\",\n    \"amount\": \"10000.0\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{orderLocalhost}}/create",
+					"host": [
+						"{{orderLocalhost}}"
+					],
+					"path": [
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7) Проверяем положительный остаток счета",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code must be 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.success).to.eql(true);",
+							"    pm.expect(responseJson.message).not.to.be.null;",
+							"    ",
+							"    pm.expect(parseFloat(responseJson.message)).to.equal(pm.collectionVariables.get('test_amount'))",
+							"});",
+							"",
+							"//console.log(pm.request.body.raw);",
+							"//console.log(pm.response.json());",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUri}}/api/v1/billing/account/:username/status/",
+					"host": [
+						"{{baseUri}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"billing",
+						"account",
+						":username",
+						"status",
+						""
+					],
+					"variable": [
+						{
+							"key": "username",
+							"value": "{{test_username}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8) Проверяем новые уведомления в сервисе нотификаций",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code must be 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.success).to.eql(true);",
+							"    pm.expect(responseJson.message).not.to.be.null;",
+							"",
+							"    const new_messages = responseJson.message.split(',').length;",
+							"    pm.expect(new_messages).not.equal(pm.collectionVariables.get('messages'))",
+							"});",
+							"",
+							"console.log(pm.request.body.raw);",
+							"console.log(pm.response.json());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUri}}/api/v1/notifications/getAll",
+					"host": [
+						"{{baseUri}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"notifications",
+						"getAll"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUri",
+			"value": "http://arch.homework",
+			"type": "string"
+		},
+		{
+			"key": "test_username",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "test_amount",
+			"value": "{{amount}}",
+			"type": "string"
+		},
+		{
+			"key": "amount",
+			"value": "\"-100.0\"",
+			"type": "string"
+		},
+		{
+			"key": "messages",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
