@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "998c6e67-a7f2-4cca-bc06-ab2992d16c2a",
-		"name": "Order-Service OTUS",
+		"_postman_id": "3623ca2f-746d-43b6-8fc1-7698c45d3004",
+		"name": "Idempotency Order Creation OTUS",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -128,8 +128,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code must be 201\", () => {",
-							"    pm.response.to.have.status(201);",
+							"pm.test(\"Status code must be 202\", () => {",
+							"    pm.response.to.have.status(202);",
 							"    const responseJson = pm.response.json();",
 							"    pm.expect(responseJson.success).to.eql(true);",
 							"    pm.expect(responseJson.message).is.string;",
@@ -147,7 +147,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"{{test_username}}\",\n    \"amount\": {{test_amount}}\n}",
+					"raw": "{\n    \"username\": \"{{test_username}}\",\n    \"amount\": 10\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -271,17 +271,17 @@
 			"response": []
 		},
 		{
-			"name": "6) Создаем заказ, на который НЕ хватает денег",
+			"name": "3) Создаем дублирующий заказ, на который хватает денег (копия)",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code must be 201\", () => {",
-							"    pm.response.to.have.status(201);",
+							"pm.test(\"Status code must be 202\", () => {",
+							"    pm.response.to.have.status(202);",
 							"    const responseJson = pm.response.json();",
 							"    pm.expect(responseJson.success).to.eql(false);",
-							"    pm.expect(responseJson.status).to.eql(500);",
+							"    pm.expect(responseJson.status).to.eql(409);",
 							"    pm.expect(responseJson.message).is.string;",
 							"});",
 							"",
@@ -297,7 +297,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"{{test_username}}\",\n    \"amount\": \"10000.0\"\n}",
+					"raw": "{\n    \"username\": \"{{test_username}}\",\n    \"amount\": 10\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -305,11 +305,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{orderLocalhost}}/create",
+					"raw": "{{baseUri}}/api/v1/order/create",
 					"host": [
-						"{{orderLocalhost}}"
+						"{{baseUri}}"
 					],
 					"path": [
+						"api",
+						"v1",
+						"order",
 						"create"
 					]
 				}
@@ -317,8 +320,17 @@
 			"response": []
 		},
 		{
-			"name": "7) Проверяем положительный остаток счета",
+			"name": "4) Проверяем, что счет не поменялся",
 			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
 				{
 					"listen": "test",
 					"script": {
@@ -328,12 +340,10 @@
 							"    const responseJson = pm.response.json();",
 							"    pm.expect(responseJson.success).to.eql(true);",
 							"    pm.expect(responseJson.message).not.to.be.null;",
-							"    ",
-							"    pm.expect(parseFloat(responseJson.message)).to.equal(pm.collectionVariables.get('test_amount'))",
+							"    pm.collectionVariables.set(\"test_amount\", parseFloat(responseJson.message));",
 							"});",
-							"",
-							"//console.log(pm.request.body.raw);",
-							"//console.log(pm.response.json());",
+							"console.log(pm.request.body.raw);",
+							"console.log(pm.response.json());",
 							""
 						],
 						"type": "text/javascript"
@@ -368,7 +378,7 @@
 			"response": []
 		},
 		{
-			"name": "8) Проверяем новые уведомления в сервисе нотификаций",
+			"name": "5) Проверяем, что было отправлено уведомление в сервисе нотификаций о дублирующем создании заказа",
 			"event": [
 				{
 					"listen": "test",
@@ -379,9 +389,10 @@
 							"    const responseJson = pm.response.json();",
 							"    pm.expect(responseJson.success).to.eql(true);",
 							"    pm.expect(responseJson.message).not.to.be.null;",
+							"   ",
+							"   var data = pm.response.json().message;",
 							"",
-							"    const new_messages = responseJson.message.split(',').length;",
-							"    pm.expect(new_messages).not.equal(pm.collectionVariables.get('messages'))",
+							"    pm.collectionVariables.set(\"messages\", data.split(',').length);",
 							"});",
 							"",
 							"console.log(pm.request.body.raw);",

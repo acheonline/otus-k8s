@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: order
-          image: achernyavskiy0n/order-service:v2
+          image: achernyavskiy0n/order-service:v3
           env:
             - name: KAFKA_BOOTSTRAP_SERVERS
               valueFrom:

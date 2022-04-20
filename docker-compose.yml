@@ -19,7 +19,7 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: broker:19092
   billing-service:
     container_name: billing-service
-    image: achernyavskiy0n/billing-service:v1
+    image: achernyavskiy0n/billing-service:v3
     deploy:
       replicas: 1
     ports:
@@ -35,7 +35,7 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: broker:19092
   order-service:
     container_name: order-service
-    image: achernyavskiy0n/order-service:v1
+    image: achernyavskiy0n/order-service:v3
     deploy:
       replicas: 1
     ports:

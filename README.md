@@ -1,20 +1,9 @@
-## **ORDER SERVICE (MSA)**
+## **ORDER SERVICE (MSA) with idempotency**
 
-Реализация Сервиса Заказа
-
-#### Варианты взаимодействий в следующих стилях в виде sequence диаграммы с описанием API на IDL:
-1) **Только HTTP взаимодействие** 
-
-![](pics/http.jpg)
-2) **Cобытийное взаимодействие с использование брокера сообщений для нотификаций (уведомлений)** 
-
-![](pics/http+broker.jpg)
-3) **Event Collaboration cтиль взаимодействия с использованием брокера сообщений** 
-
-![](pics/broker-only.jpg)
-
+Реализация Сервиса Заказа с применением паттерна идемпотентности. 
+При создании заказа формируется и сохраняется UUID, который запрещает создавать ровно такой же по составу заказ
 ***
-### Вариант, наиболее адекватный для решения данной задачи
+### Архитектура сервиса
 
 ![](pics/msa-result-architecture.jpg)
 
@@ -34,5 +23,5 @@
 
 ### Postman collection run
     
-    newman run order.service.postman_collection.json
+    newman run idempotency.order.service.creation.order.postman_collection.json
 

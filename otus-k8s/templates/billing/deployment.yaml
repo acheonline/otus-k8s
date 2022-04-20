@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: billing
-          image: achernyavskiy0n/billing-service:v2
+          image: achernyavskiy0n/billing-service:v3
           env:
             - name: KAFKA_BOOTSTRAP_SERVERS
               valueFrom:
