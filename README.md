@@ -19,7 +19,8 @@
 ***
 #### Функционалная схема API
 ![](pics/msa_scheme.jpg)
-### `Целевые сервисы `DELIVERY-SERVICE`, `STORAGE-SERVICE` и `OPERATION-SERVICE` хранят у себя собственную авторизационную модель (ролевую модель) прав обращения к endpoint'ам.`
+
+`Целевые сервисы `DELIVERY-SERVICE`, `STORAGE-SERVICE` и `OPERATION-SERVICE` хранят у себя собственную авторизационную модель (ролевую модель) прав обращения к endpoint'ам.`
 ***
 ***
 
