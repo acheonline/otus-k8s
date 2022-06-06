@@ -17,6 +17,8 @@ service:
     port: 8081
   storage:
     port: 8082
+  operation:
+    port: 8083
 
 ingress:
   hosts:

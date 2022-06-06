@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: news-operation-service
+  labels:
+    app: operation-app
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.operation.port }}
+      targetPort: operation-port
+      protocol: TCP
+  selector:
+    app: operation-app

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-operation-service
+  labels:
+    {{- include "otus-k8s.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "otus-k8s.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      name: {{ .Chart.Name }}
+      labels:
+        {{- include "otus-k8s.selectorLabels" . | nindent 8 }}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.service.operation.port }}"
+        prometheus.io/path: "/prometheus"
+    spec:
+      containers:
+        - name: news-operation-service
+          image: achernyavskiy0n/news-operation-manager:v1
+          imagePullPolicy: Always
+          ports:
+            - name: operation-port
+              containerPort: {{ .Values.service.operation.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+              port: operation-port
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: operation-port
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          envFrom:
+            - configMapRef:
+                name: {{ .Chart.Name }}-operation-config
