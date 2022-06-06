@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+data:
+  POSTGRES_USERNAME: '{{ .Values.externalPostgresql.postgresqlUsername }}'
+  POSTGRES_DB: '{{ .Values.externalPostgresql.postgresqlDatabase }}'
+  POSTGRES_HOST: '{{ .Values.externalPostgresql.postgresqlHost }}'
+  POSTGRES_PORT: '{{ .Values.externalPostgresql.postgresqlPort }}'
+
+  DATASOURCE_USERNAME: {{ .Values.externalPostgresql.postgresqlUsername }}
+  DATASOURCE_URL: "jdbc:postgresql://postgres:{{ .Values.externalPostgresql.postgresqlPort}}/{{ .Values.externalPostgresql.postgresqlDatabase}}"
+
+

@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-storage-service
+  labels:
+    {{- include "otus-k8s.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "otus-k8s.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      name: {{ .Chart.Name }}
+      labels:
+        {{- include "otus-k8s.selectorLabels" . | nindent 8 }}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.service.storage.port }}"
+        prometheus.io/path: "/prometheus"
+    spec:
+      containers:
+        - name: news-storage-service
+          image: achernyavskiy0n/news-storage:v1
+          imagePullPolicy: Always
+          env:
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Chart.Name }}-storage-config
+                  key: KAFKA_BOOTSTRAP_SERVERS
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Chart.Name }}-storage-config
+                  key: SERVER_PORT
+            - name: DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: DATASOURCE_URL
+            - name: DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: DATASOURCE_USERNAME
+            - name: DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: DATASOURCE_PASSWORD
+          ports:
+            - name: storage-port
+              containerPort: {{ .Values.service.storage.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+              port: storage-port
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: storage-port
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          envFrom:
+            - configMapRef:
+                name: {{ .Chart.Name }}-storage-config

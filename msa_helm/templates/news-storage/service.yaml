@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: news-storage-service
+  labels:
+    app: storage-app
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.storage.port }}
+      targetPort: storage-port
+      protocol: TCP
+  selector:
+    app: storage-app
