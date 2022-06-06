@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: news-consumer-mock-service
+  labels:
+    app: consumer-mock
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.consumermock.port }}
+      targetPort: consumer-port
+      protocol: TCP
+  selector:
+    app: consumer-mock

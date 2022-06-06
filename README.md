@@ -40,18 +40,16 @@
 * Сервис, эмулирующий получение данных потребителем из Apache Kafka - (подписан на топики `news` и `operation`)
 
 
-План проекта:
+### Запуск проекта
 
-~~1) написать identity-service~~ 
+    minikube start --kubernetes-version v1.23.2 --driver hyperkit --cpus=2 --memory=8G --addons=ingress
+    minikube ip (get ip)
+    sudo nano /etc/hosts (modify iptable, add e.g. "127.16.64.10 arch.homework")
 
-~~2) написать provider-mock~~
+    kubectl create namespace kafka
+    kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
+    kubectl apply -f https://strimzi.io/examples/latest/kafka/kafka-persistent-single.yaml -n kafka
+    kubectl wait kafka/my-cluster --for=condition=Ready --timeout=300s -n kafka 
 
-~~3) написать delivery service~~
-
-~~4) написать потребителя~~ 
-
-~~5) написать storage-service~~
-
-6) написать operation-service
-7) написать api-gateway
-8) собрать проект
+    kubectl create namespace news
+    helm install news ./msa_helm --namespace news

@@ -1,0 +1,24 @@
+externalPostgresql:
+  postgresqlUsername: postgres
+  postgresqlPassword: cG9zdGdyZXM=
+  postgresqlDatabase: news_db
+  postgresqlHost: "postgres"
+  postgresqlPort: 5432
+
+migrationService:
+  image: achernyavskiy0n/news-db-init:v2
+
+replicaCount: 1
+service:
+  type: NodePort
+  consumermock:
+    port: 8088
+  delivery:
+    port: 8081
+
+ingress:
+  hosts:
+    paths:
+      - path: /api/v1/identity
+        service: identity-app-service
+        port: 8082
