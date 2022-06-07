@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: broker
+  labels:
+    app: broker-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: broker-app
+  template:
+    metadata:
+      labels:
+        app: broker-app
+    spec:
+      containers:
+        - name: broker
+          image: confluentinc/cp-server:6.2.4
+          imagePullPolicy: Always
+          ports:
+            - name: external-port
+              containerPort: {{ .Values.service.kafka.externalport }}
+              protocol: TCP
+            - name: internal-port
+              containerPort: {{ .Values.service.kafka.internalport }}
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: broker-config

@@ -19,6 +19,11 @@ service:
     port: 8082
   operation:
     port: 8083
+  zookeeper:
+    port: 2181
+  kafka:
+    externalport: 9092
+    internalport: 19092
 
 ingress:
   hosts:

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zookeeper
+  labels:
+    app: zookeeper-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: zookeeper-app
+  template:
+    metadata:
+      labels:
+        app: zookeeper-app
+    spec:
+      containers:
+        - name: zookeeper
+          image: confluentinc/cp-zookeeper:5.5.1
+          imagePullPolicy: Always
+          ports:
+            - name: zookeeper-port
+              containerPort: {{ .Values.service.zookeeper.port }}
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: zookeeper-config

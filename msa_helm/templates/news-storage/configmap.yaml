@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: {{ .Chart.Name }}-storage-config
 data:
-  KAFKA_BOOTSTRAP_SERVERS: my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092
+  KAFKA_BOOTSTRAP_SERVERS: "broker:9092"
   SERVER_PORT: '{{ .Values.service.storage.port }}'
