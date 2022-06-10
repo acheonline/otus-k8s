@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-provider-mock
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: provider-mock
+  template:
+    metadata:
+      name: {{ .Chart.Name }}
+      labels:
+        app: provider-mock
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.service.providermock.port }}"
+        prometheus.io/path: "/prometheus"
+    spec:
+      containers:
+        - name: news-provider-mock
+          image: achernyavskiy0n/news-provider-mock:v1
+          imagePullPolicy: Always
+          ports:
+            - name: provider-port
+              containerPort: {{ .Values.service.providermock.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+              port: provider-port
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: provider-port
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          envFrom:
+            - configMapRef:
+                name: {{ .Chart.Name }}-provider-config

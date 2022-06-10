@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}-news-consumer-mock
+  name: {{ .Chart.Name }}-consumer-mock
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:

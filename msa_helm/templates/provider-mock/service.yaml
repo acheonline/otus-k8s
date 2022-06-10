@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: news-provider-mock-service
+  labels:
+    app: provider-mock
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.providermock.port }}
+      targetPort: provider-port
+      protocol: TCP
+  selector:
+    app: provider-mock
