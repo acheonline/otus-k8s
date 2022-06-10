@@ -4,4 +4,4 @@ metadata:
   name: {{ .Chart.Name }}-operation-config
 data:
   SERVER_PORT: '{{ .Values.service.operation.port }}'
-  NEWS_STORAGE_URL: "http://news-storage-service.news:8082"
+  NEWS_STORAGE_URL: "http://news-storage-service:8082"

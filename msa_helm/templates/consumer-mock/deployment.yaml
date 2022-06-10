@@ -2,18 +2,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Chart.Name }}-news-consumer-mock
-  labels:
-    {{- include "otus-k8s.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "otus-k8s.selectorLabels" . | nindent 6 }}
+      app: consumer-mock
   template:
     metadata:
       name: {{ .Chart.Name }}
       labels:
-        {{- include "otus-k8s.selectorLabels" . | nindent 8 }}
+        app: consumer-mock
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "{{ .Values.service.consumermock.port }}"
