@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: news-identity-service
+  labels:
+    app: identity-app
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.identity.port }}
+      targetPort: identity-port
+      protocol: TCP
+  selector:
+    app: identity-app

@@ -23,6 +23,8 @@ service:
     port: 8082
   operation:
     port: 8083
+  identity:
+    port: 8084
 
 ingress:
   hosts:

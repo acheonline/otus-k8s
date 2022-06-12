@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-identity-service
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: identity-app
+  template:
+    metadata:
+      name: {{ .Chart.Name }}
+      labels:
+        app: identity-app
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.service.identity.port }}"
+        prometheus.io/path: "/prometheus"
+    spec:
+      containers:
+        - name: news-identity-service
+          image: achernyavskiy0n/identity:v3
+          imagePullPolicy: Always
+          env:
+            - name: DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: DATASOURCE_URL
+            - name: DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: DATASOURCE_USERNAME
+            - name: DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: DATASOURCE_PASSWORD
+          ports:
+            - name: identity-port
+              containerPort: {{ .Values.service.identity.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+              port: identity-port
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: identity-port
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          envFrom:
+            - configMapRef:
+                name: {{ .Chart.Name }}-identity-config

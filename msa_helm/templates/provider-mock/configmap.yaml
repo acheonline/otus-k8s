@@ -6,3 +6,4 @@ data:
   SERVER_PORT: '{{ .Values.service.providermock.port }}'
   DELIVERY_HOST: "http://api-gateway:{{ .Values.service.gateway.port}}/api/v1/news/push"
   DELIVERY_CRON: "0/10 * * * * *"
+  IDENTITY_HOST: "http://news-identity-service:{{ .Values.service.identity.port }}/api/v1/identity/user/login"

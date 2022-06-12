@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: news-provider-mock
-          image: achernyavskiy0n/news-provider-mock:v1
+          image: achernyavskiy0n/news-provider-mock:v2
           imagePullPolicy: Always
           ports:
             - name: provider-port
