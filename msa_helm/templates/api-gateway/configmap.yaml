@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-gateway-config
+data:
+  SERVER_PORT: '{{ .Values.service.gateway.port }}'
+  JAVA_OPTS: "-Xss256k"
+  JWT_PUBLIC_KEY: -----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAz6nSQ0mkeF3KTHvdXVmYk2Pxt0qNPpcTdRWYfPuhThorFdNUW2gzWyfFlo0/S9tCSVhd71M3dNN220S94QN+kcoqF2V5FDlOWpAsVb6Rjp5yoeyNB94VXwMegdmRA2eLhG89ncgHu7vsPjxoAgceLRbOHYYypSUKdYruCObBKDqS0JO8vzqg80bnm2xmGk5gEKjSha2DXx3hyAMSfnOG1GE/r8W35472kq1X04zm2iuoCCSwifiSi5GF4Lr1seLibprai9uctkhEO2TJeHol1sEiPXLSDu5XOIAhzUrHLjx3tzpeYdLSyGwhlq0DOluy6hDAl/JR/GzEgEuNBWTZ2wIDAQAB-----END PUBLIC KEY-----
+  NEWS_HOST: "http://news-delivery-service:{{ .Values.service.delivery.port }}"
+  OPERATION_HOST: "http://news-operation-service:{{ .Values.service.operation.port }}"

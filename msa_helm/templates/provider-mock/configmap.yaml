@@ -4,5 +4,5 @@ metadata:
   name: {{ .Chart.Name }}-provider-config
 data:
   SERVER_PORT: '{{ .Values.service.providermock.port }}'
-  DELIVERY_HOST: "http://news-delivery-service:{{ .Values.service.delivery.port}}/api/v1/news/push"
+  DELIVERY_HOST: "http://api-gateway:{{ .Values.service.gateway.port}}/api/v1/news/push"
   DELIVERY_CRON: "0/10 * * * * *"

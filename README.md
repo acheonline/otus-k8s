@@ -52,4 +52,4 @@
     kubectl wait kafka/my-cluster --for=condition=Ready --timeout=300s -n kafka 
 
     kubectl create namespace news
-    helm install news ./msa_helm --namespace news --wait --wait-for-jobs 
+    helm install news ./msa_helm --namespace news 

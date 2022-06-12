@@ -11,8 +11,10 @@ migrationService:
 replicaCount: 1
 service:
   type: NodePort
-  providermock:
+  gateway:
     port: 8089
+  providermock:
+    port: 8087
   consumermock:
     port: 8088
   delivery:
