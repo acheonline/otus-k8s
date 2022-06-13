@@ -44,7 +44,10 @@
 
     minikube start --kubernetes-version v1.23.2 --driver hyperkit --cpus=2 --memory=8G --addons=ingress
     minikube ip (get ip)
-    sudo nano /etc/hosts (modify iptable, add e.g. "127.16.64.10 arch.homework")
+    sudo nano /etc/hosts 
+Далее добавь в таблицу свой ip из результата вызовы команды minikube ip. Например, "127.16.64.10 news.msa"
+
+Основной хост для внешних, по отношению к внутреннему неймспейсу сервиса, вызовов - news.msa
 
     kubectl create namespace kafka
     kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka

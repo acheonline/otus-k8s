@@ -5,3 +5,4 @@ metadata:
 data:
   SERVER_PORT: '{{ .Values.service.operation.port }}'
   NEWS_STORAGE_URL: "http://news-storage-service:{{ .Values.service.storage.port}}"
+  JAVA_OPTS: "-Xss256k"

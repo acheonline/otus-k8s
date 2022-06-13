@@ -29,6 +29,6 @@ service:
 ingress:
   hosts:
     paths:
-      - path: /api/v1/identity
-        service: identity-app-service
-        port: 8082
+      - path: /*
+        service: api-gateway
+        port: 8089

@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Chart.Name }}-ingress
+  labels:
+    {{- include "otus-k8s.labels" . | nindent 4 }}
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: news.msa
+      http:
+        paths:
+          {{- range .Values.ingress.hosts.paths }}
+          - path: {{ .path }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .service }}
+                port:
+                  number: {{ .port }}
+
+  {{- end }}
