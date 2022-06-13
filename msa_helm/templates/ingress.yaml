@@ -2,10 +2,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ .Chart.Name }}-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
   labels:
     {{- include "otus-k8s.labels" . | nindent 4 }}
 spec:
-  ingressClassName: nginx
   rules:
     - host: news.msa
       http:
