@@ -29,14 +29,14 @@ spec:
             httpGet:
               path: /health/liveness
               port: operation-port
-            initialDelaySeconds: 30
+            initialDelaySeconds: 600
             periodSeconds: 10
             timeoutSeconds: 5
           readinessProbe:
             httpGet:
               path: /health/readiness
               port: operation-port
-            initialDelaySeconds: 10
+            initialDelaySeconds: 600
             periodSeconds: 5
             timeoutSeconds: 2
           envFrom:
