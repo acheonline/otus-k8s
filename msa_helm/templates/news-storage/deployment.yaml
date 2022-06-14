@@ -55,14 +55,14 @@ spec:
             httpGet:
               path: /health/liveness
               port: storage-port
-            initialDelaySeconds: 600
+            initialDelaySeconds: 360
             periodSeconds: 10
             timeoutSeconds: 5
           readinessProbe:
             httpGet:
               path: /health/readiness
               port: storage-port
-            initialDelaySeconds: 600
+            initialDelaySeconds: 360
             periodSeconds: 5
             timeoutSeconds: 2
           envFrom:
