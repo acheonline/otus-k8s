@@ -45,14 +45,20 @@
     minikube start --kubernetes-version v1.23.0 --driver hyperkit --cpus=2 --memory=8G --addons=ingress
     minikube ip (get ip)
     sudo nano /etc/hosts 
-Далее добавь в таблицу свой ip из результата вызовы команды minikube ip. Например, "127.16.64.10 news.msa"
+Далее добавить в таблицу свой ip из результата вызовы команды minikube ip. Например, "127.16.64.10 news.msa"
 
 Основной хост для внешних, по отношению к внутреннему неймспейсу сервиса, вызовов - news.msa
+
+
+Установить Apache Kafka в отдельный неймспейс
 
     kubectl create namespace kafka
     kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
     kubectl apply -f https://strimzi.io/examples/latest/kafka/kafka-persistent-single.yaml -n kafka
-    kubectl wait kafka/my-cluster --for=condition=Ready --timeout=300s -n kafka 
+    kubectl wait kafka/my-cluster --for=condition=Ready --timeout=300s -n kafka
+
+Установить проект
 
     kubectl create namespace news
-    helm upgrade --install news ./msa_helm --namespace news 
+    helm upgrade --install news ./msa_helm --namespace news
+
